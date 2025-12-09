@@ -1,4 +1,4 @@
-# Cut.py: My AI-Powered Video Highlight Generator
+# Cut.py: An AI-Powered Video Highlight Generator
 
 Welcome to **Cut.py**, my personal project where I'm building an intelligent video processing pipeline. I designed this tool to automatically generate engaging highlights from long-form videos using the power of local AI models.
 
@@ -103,4 +103,3 @@ curl -X POST "http://localhost:8000/highlight/process" \
 
 ---
 
-_Built with ❤️ by Arafat._
