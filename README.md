@@ -9,8 +9,8 @@ I've created a robust, privacy-focused video editor that runs entirely on your l
 - **🤖 Local AI Analysis**: I integrated **Llama 3** (via `llama.cpp`) to "watch" the video transcripts and understand context. It doesn't just cut randomly; it finds the _best_ parts.
 - **🗣️ User-Directed Cuts**: I added a feature where you can tell the AI exactly what to look for. Want the "funniest moment" or "the part about the budget"? Just ask.
 - **🐳 Dockerized FFmpeg**: I solved the "it works on my machine" problem for video processing. All video cutting happens inside a **Docker container**, ensuring consistent results regardless of your host OS (and fixing those annoying Apple Silicon warnings).
-- **📝 Precision Transcription**: I'm using **Faster Whisper** to generate highly accurate subtitles and transcripts, which serve as the foundation for the AI's understanding.
-- **🎬 Smart Scene Detection**: I use `PySceneDetect` to ensure cuts happen at natural scene boundaries, avoiding jarring transitions.
+- **📝 Precision Transcription**: Using **Faster Whisper** to generate highly accurate subtitles and transcripts, which serve as the foundation for the AI's understanding.
+- **🎬 Smart Scene Detection**: Using `PySceneDetect` to ensure cuts happen at natural scene boundaries, avoiding jarring transitions.
 
 ## 🛠️ How It Works (Under the Hood)
 
@@ -23,11 +23,11 @@ When you upload a video to my API, here's the journey it takes:
     - _Default Mode_: It looks for the most engaging segment.
     - _Prompt Mode_: If you provided a prompt (e.g., "Find the demo"), it searches for that specific content.
 5.  **Intelligent Cutting**: Once the best segment is identified, I calculate the exact timestamps.
-6.  **Processing**: I spin up a Docker container to run FFmpeg and surgically extract the clip without re-encoding (stream copy) for blazing fast speed.
+6.  **Processing**: Spin up a Docker container to run FFmpeg and surgically extract the clip without re-encoding (stream copy) for blazing fast speed.
 
 ## 📦 Installation & Setup
 
-Here is how you can set up my project on your own machine.
+I'm sharing here how you can set up my project on your own machine.
 
 ### Prerequisites
 
@@ -43,7 +43,7 @@ cd cut_py
 uv sync
 ```
 
-### Step 2: Setup Models
+### Step 2: Set up Models
 
 I wrote a script to download the necessary GGUF models for the LLM.
 
