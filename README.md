@@ -17,8 +17,8 @@ I've created a robust, privacy-focused video editor that runs entirely on your l
 When you upload a video to my API, here's the journey it takes:
 
 1.  **Ingestion**: The video is saved, and I generate a unique ID.
-2.  **Scene Detection**: I scan the video for visual cuts to understand the visual structure.
-3.  **Transcription**: I extract the audio and transcribe it using the Whisper model.
+2.  **Scene Detection**: Scan the video for visual cuts to understand the visual structure.
+3.  **Transcription**: Extract the audio and transcribe it using the Whisper model.
 4.  **AI Analysis**: This is the cool part. I feed the transcript and scene data into a local LLM (Mistral/Llama).
     - _Default Mode_: It looks for the most engaging segment.
     - _Prompt Mode_: If you provided a prompt (e.g., "Find the demo"), it searches for that specific content.
