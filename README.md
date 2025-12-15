@@ -91,7 +91,19 @@ curl -X POST "http://localhost:8000/highlight/process" \
   -F "video=@/path/to/podcast.mp4" \
   -F "target_duration=60" \
   -F "prompt=Find the segment where they discuss the release date" \
+  -F "prompt=Find the segment where they discuss the release date" \
   --output release_date_clip.mp4
+```
+
+### YouTube Processing (New Feature!)
+
+Process a video directly from YouTube.
+
+```bash
+curl -X POST "http://localhost:8000/highlight/process-url" \
+  -F "youtube_url=https://www.youtube.com/watch?v=YOUR_VIDEO_ID" \
+  -F "target_duration=30" \
+  --output highlight.mp4
 ```
 
 ## 🏗️ Tech Stack
