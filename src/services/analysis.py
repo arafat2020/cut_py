@@ -6,7 +6,7 @@ from llama_cpp import Llama
 from src.models.analysis import HighlightResponse
 
 class AnalysisService:
-    def __init__(self, model_path: str, n_ctx: int = 8192):
+    def __init__(self, model_path: str, n_ctx: int = 32768):
         """
         Initialize Llama model.
         Args:

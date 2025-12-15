@@ -15,7 +15,7 @@ venv/
 .env
 
 # Large Media & Models
-models/
+/models/
 videos/
 *.gguf
 *.mp4
