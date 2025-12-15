@@ -31,24 +31,15 @@ def get_analysis_service():
         print("Analysis Model loaded.")
     return _analysis_service
 
-@router.post("/highlight/process", response_class=FileResponse)
-async def process_video(
-    background_tasks: BackgroundTasks,
-    video: UploadFile = File(...),
-    target_duration: float = Form(30.0),
-    prompt: Optional[str] = Form(None)
+async def process_video_pipeline(
+    video_path: Path,
+    target_duration: float,
+    prompt: Optional[str],
+    background_tasks: BackgroundTasks
 ):
-    """
-    Process video to generate a highlight.
-    Returns the cut video file.
-    """
-    video_path = None
     output_path = None
     
     try:
-        # 1. Save Video
-        video_path = await VideoService.save_upload(video)
-        
         # 2. Detect Scenes
         scene_service = SceneDetectionService()
         scenes = scene_service.detect_scenes(video_path)
@@ -99,7 +90,41 @@ async def process_video(
     except Exception as e:
         # Cleanup on error if files exist
         if video_path and video_path.exists():
-            os.remove(video_path)
+            try:
+                os.remove(video_path)
+            except:
+                pass
         
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/highlight/process", response_class=FileResponse)
+async def process_video(
+    background_tasks: BackgroundTasks,
+    video: UploadFile = File(...),
+    target_duration: float = Form(30.0),
+    prompt: Optional[str] = Form(None)
+):
+    """
+    Process video upload to generate a highlight.
+    """
+    video_path = await VideoService.save_upload(video)
+    return await process_video_pipeline(video_path, target_duration, prompt, background_tasks)
+
+@router.post("/highlight/process-url", response_class=FileResponse)
+async def process_video_url(
+    background_tasks: BackgroundTasks,
+    youtube_url: str = Form(...),
+    target_duration: float = Form(30.0),
+    prompt: Optional[str] = Form(None)
+):
+    """
+    Process YouTube video to generate a highlight.
+    """
+    # Download the video first
+    try:
+        video_path = VideoService.download_from_url(youtube_url)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+        
+    return await process_video_pipeline(video_path, target_duration, prompt, background_tasks)
