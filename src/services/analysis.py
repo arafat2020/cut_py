@@ -64,4 +64,14 @@ Response:
         )
         
         content = output["choices"][0]["message"]["content"]
-        return HighlightResponse.model_validate_json(content)
+        response = HighlightResponse.model_validate_json(content)
+
+        # Enforce exact target duration
+        for highlight in response.highlights:
+            center = (highlight.start_time + highlight.end_time) / 2
+            half_duration = target_duration / 2
+            
+            highlight.start_time = max(0.0, center - half_duration)
+            highlight.end_time = highlight.start_time + target_duration
+            
+        return response
