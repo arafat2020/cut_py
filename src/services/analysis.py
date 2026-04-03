@@ -1,9 +1,10 @@
 """Analysis Service using Llama.cpp"""
 import os
 import json
-from typing import List, Dict, Any, Tuple
+from typing import List, Optional
 from llama_cpp import Llama
 from src.models.analysis import HighlightResponse
+from src.models.video import TranscriptionSegment, SceneSegment
 
 class AnalysisService:
     def __init__(self, model_path: str, n_ctx: int = 32768):
@@ -23,12 +24,12 @@ class AnalysisService:
             verbose=False
         )
 
-    def analyze_content(self, transcript: List[Dict[str, Any]], scenes: List[Tuple[float, float]], target_duration: float, user_prompt: str = None) -> HighlightResponse:
+    def analyze_content(self, transcript: List[TranscriptionSegment], scenes: List[SceneSegment], target_duration: float, user_prompt: Optional[str] = None) -> HighlightResponse:
         """
         Analyze transcript and scenes to find the best highlight.
         """
         # Prepare context
-        transcript_text = "\n".join([f"[{s['start']:.2f}-{s['end']:.2f}] {s['text']}" for s in transcript])
+        transcript_text = "\n".join([f"[{s.start:.2f}-{s.end:.2f}] {s.text}" for s in transcript])
         
         criteria = "Identify the most interesting, funny, or important part of the conversation."
         if user_prompt:
