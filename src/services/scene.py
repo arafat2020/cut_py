@@ -1,14 +1,16 @@
 """Scene Detection Service"""
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 from scenedetect import open_video, SceneManager, ContentDetector
+
+from src.models.video import SceneSegment
 
 class SceneDetectionService:
     @staticmethod
-    def detect_scenes(video_path: Path, threshold: float = 27.0) -> List[Tuple[float, float]]:
+    def detect_scenes(video_path: Path, threshold: float = 27.0) -> List[SceneSegment]:
         """
         Detect scenes in a video using PySceneDetect.
-        Returns a list of (start_time, end_time) tuples in seconds.
+        Returns a list of SceneSegment Pydantic models.
         """
         if not video_path.exists():
             raise FileNotFoundError(f"Video file not found: {video_path}")
@@ -29,6 +31,6 @@ class SceneDetectionService:
         scenes = []
         for scene in scene_list:
             start, end = scene
-            scenes.append((start.get_seconds(), end.get_seconds()))
+            scenes.append(SceneSegment(start_time=start.get_seconds(), end_time=end.get_seconds()))
             
         return scenes

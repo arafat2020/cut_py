@@ -2,6 +2,9 @@
 import subprocess
 from pathlib import Path
 
+FFMPEG_CPU_LIMIT = 2.0  # e.g. 2 cores max
+FFMPEG_MEMORY_LIMIT = "1g"  # e.g. 1GB RAM max
+
 class EditingService:
     @staticmethod
     def cut_video(input_path: Path, start_time: float, end_time: float, output_path: Path) -> Path:
@@ -41,7 +44,15 @@ class EditingService:
         # We mount the common_path to /data
         cmd = [
             "docker", "run", "--rm",
-            "-v", f"{common_path}:/data",
+            "-v", f"{common_path}:/data"
+        ]
+        
+        if FFMPEG_CPU_LIMIT is not None:
+            cmd.extend(["--cpus", str(FFMPEG_CPU_LIMIT)])
+        if FFMPEG_MEMORY_LIMIT is not None:
+            cmd.extend(["--memory", str(FFMPEG_MEMORY_LIMIT)])
+            
+        cmd.extend([
             "ffmpeg-container",
             "-y",  # Overwrite output
             "-ss", str(start_time),
@@ -49,7 +60,7 @@ class EditingService:
             "-to", str(end_time - start_time),  # Duration (since -ss is before -i)
             "-c", "copy",  # Stream copy
             f"/data/{rel_output}"
-        ]
+        ])
         
         try:
             subprocess.run(cmd, check=True, capture_output=True)
