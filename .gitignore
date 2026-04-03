@@ -12,7 +12,6 @@ env/
 venv/
 
 # Environment variables
-.env
 
 # Large Media & Models
 /models/
@@ -24,5 +23,6 @@ videos/
 # IDE & System
 .DS_Store
 .idea/
-.vscode/
 *.log
+config.bat
+node_modules

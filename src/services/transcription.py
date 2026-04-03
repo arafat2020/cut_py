@@ -1,7 +1,9 @@
 """Transcription Service using Faster Whisper"""
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List
 from faster_whisper import WhisperModel
+
+from src.models.video import TranscriptionSegment
 
 class TranscriptionService:
     def __init__(self, model_size: str = "base", device: str = "cpu", compute_type: str = "int8"):
@@ -14,10 +16,10 @@ class TranscriptionService:
         """
         self.model = WhisperModel(model_size, device=device, compute_type=compute_type)
 
-    def transcribe(self, audio_path: Path) -> List[Dict[str, Any]]:
+    def transcribe(self, audio_path: Path) -> List[TranscriptionSegment]:
         """
         Transcribe audio file.
-        Returns a list of segments with start, end, and text.
+        Returns a list of TranscriptionSegment Pydantic models.
         """
         if not audio_path.exists():
             raise FileNotFoundError(f"Audio file not found: {audio_path}")
@@ -39,10 +41,10 @@ class TranscriptionService:
         
         result = []
         for segment in segments:
-            result.append({
-                "start": segment.start,
-                "end": segment.end,
-                "text": segment.text.strip()
-            })
+            result.append(TranscriptionSegment(
+                start=segment.start,
+                end=segment.end,
+                text=segment.text.strip()
+            ))
             
         return result
